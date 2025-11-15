@@ -1,32 +1,55 @@
 // src/services/api.tsx
 
-// Dirección base de la API (solo actualízala cuando sepas cuál es)
-const API_BASE_URL = "https://ejemploapi.com/api"; // 👈 Cambia esta URL cuando tengas la API real
+const COCKTAIL_API_BASE = "https://www.thecocktaildb.com/api/json/v1/1";
 
-// Función genérica GET
-export async function getData(endpoint: string) {
+export interface Drink {
+  idDrink: string;
+  strDrink: string;
+  strDrinkThumb: string;
+}
+
+export interface DrinkDetail {
+  idDrink: string;
+  strDrink: string;
+  strDrinkThumb: string;
+  strCategory: string;
+  strAlcoholic: string;
+  strGlass: string;
+  strInstructions: string;
+  strIngredient1?: string;
+  strIngredient2?: string;
+  strIngredient3?: string;
+  strIngredient4?: string;
+  strIngredient5?: string;
+  strMeasure1?: string;
+  strMeasure2?: string;
+  strMeasure3?: string;
+  strMeasure4?: string;
+  strMeasure5?: string;
+}
+
+// Obtener lista de cócteles por categoría
+export async function getCocktailsByCategory(category: string = "Ordinary_Drink") {
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    const response = await fetch(`${COCKTAIL_API_BASE}/filter.php?c=${category}`);
     if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-    return await response.json();
+    const data = await response.json();
+    return data.drinks as Drink[];
   } catch (error) {
-    console.error("Error al obtener datos:", error);
+    console.error("Error al obtener cócteles:", error);
     throw error;
   }
 }
 
-// Función genérica POST
-export async function postData(endpoint: string, data: unknown) {
+// Obtener detalles de un cóctel por ID
+export async function getCocktailById(id: string) {
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(`${COCKTAIL_API_BASE}/lookup.php?i=${id}`);
     if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-    return await response.json();
+    const data = await response.json();
+    return data.drinks[0] as DrinkDetail;
   } catch (error) {
-    console.error("Error al enviar datos:", error);
+    console.error("Error al obtener detalles del cóctel:", error);
     throw error;
   }
 }
