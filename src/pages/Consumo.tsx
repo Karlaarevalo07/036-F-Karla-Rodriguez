@@ -79,8 +79,7 @@ export default function Consumo() {
         {drinks.map((drink) => (
           <div
             key={drink.idDrink}
-            onClick={() => handleDrinkClick(drink.idDrink)}
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <div className="aspect-square overflow-hidden">
               <img
@@ -89,10 +88,16 @@ export default function Consumo() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="p-4">
+            <div className="p-4 space-y-3">
               <h3 className="font-semibold text-gray-800 text-center line-clamp-2 min-h-[3rem]">
                 {drink.strDrink}
               </h3>
+              <button
+                onClick={() => handleDrinkClick(drink.idDrink)}
+                className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+              >
+                Ver detalles
+              </button>
             </div>
           </div>
         ))}
